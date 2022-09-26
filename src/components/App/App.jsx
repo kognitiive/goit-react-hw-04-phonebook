@@ -6,12 +6,6 @@ import ContactList from '../ContactList/ContactList';
 
 import { Container } from './App.styled';
 
-const INITIAL_STATE = {
-  filter: '',
-  name: '',
-  number: '',
-};
-
 export class App extends Component {
   state = {
     contacts: [
@@ -21,37 +15,32 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = evt => {
-    evt.preventDefault();
+  onFormSubmit = ({ name, number }) => {
     this.setState(prevState => {
-      const { name, number } = this.state;
-      for (const contact of prevState.contacts) {
-        if (contact.name.includes(name)) {
-          return alert(name + `is already in contacts`);
-        }
+      const currName = name;
+
+      if (prevState.contacts.find(({ name }) => name === currName)) {
+        return alert(name + `is already in contacts`);
       }
       return { contacts: [{ name, number }, ...prevState.contacts] };
     });
-    this.reset();
   };
 
   visibleContacts = names => {
     if (names.length === 0) {
       return [];
-    } else {
-      return names.filter(contact =>
-        contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
-      );
     }
+
+    return names.filter(contact =>
+      contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    );
+  };
+
+  handleChange = evt => {
+    const { name, value } = evt.target;
+    this.setState({ [name]: value });
   };
 
   onDeleteName = currName => {
@@ -65,10 +54,6 @@ export class App extends Component {
     this.setState({ contacts: [...newCont] });
   };
 
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
-  };
-
   render() {
     const names = [...this.state.contacts];
     const visibleContacts = this.visibleContacts(names);
@@ -76,12 +61,7 @@ export class App extends Component {
     return (
       <Container>
         <h1>Phonebook</h1>
-        <ContactForm
-          name={this.state.name}
-          number={this.state.number}
-          onChange={this.handleChange}
-          onSubmit={this.handleSubmit}
-        />
+        <ContactForm onSubmit={this.onFormSubmit} />
         <h2>Contacts</h2>
         <Filter filter={this.state.filter} onChange={this.handleChange} />
         <ContactList
