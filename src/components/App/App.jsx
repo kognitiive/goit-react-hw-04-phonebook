@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
+
+import ContactForm from '../ContactForm/ContactForm';
+import Filter from '../Filter/Filter';
+import ContactList from '../ContactList/ContactList';
+
+import { Container } from './App.styled';
 
 const INITIAL_STATE = {
   filter: '',
@@ -9,7 +14,12 @@ const INITIAL_STATE = {
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     filter: '',
     name: '',
     number: '',
@@ -24,12 +34,35 @@ export class App extends Component {
     evt.preventDefault();
     this.setState(prevState => {
       const { name, number } = this.state;
-      if (prevState.contacts.includes(name)) {
-        return console.log('Already in PhoneBook');
+      for (const contact of prevState.contacts) {
+        if (contact.name.includes(name)) {
+          return alert(name + `is already in contacts`);
+        }
       }
-      return { contacts: [name + ': ' + number, ...prevState.contacts] };
+      return { contacts: [{ name, number }, ...prevState.contacts] };
     });
     this.reset();
+  };
+
+  visibleContacts = names => {
+    if (names.length === 0) {
+      return [];
+    } else {
+      return names.filter(contact =>
+        contact.name.toLowerCase().includes(this.state.filter.toLowerCase())
+      );
+    }
+  };
+
+  onDeleteName = currName => {
+    const newCont = [];
+    this.state.contacts.map(contact => {
+      if (currName === contact.name) {
+        return {};
+      }
+      return newCont.push(contact);
+    });
+    this.setState({ contacts: [...newCont] });
   };
 
   reset = () => {
@@ -37,60 +70,24 @@ export class App extends Component {
   };
 
   render() {
-    const { name, number, filter } = this.state;
-    const nameInputId = nanoid();
-    const numberInputId = nanoid();
-    const filterInputId = nanoid();
     const names = [...this.state.contacts];
+    const visibleContacts = this.visibleContacts(names);
 
     return (
-      <div>
-        <h2>PhoneBook</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor={nameInputId}>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={name}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            onChange={this.handleChange}
-            id={nameInputId}
-          />
-          <label htmlFor={numberInputId}>Number</label>
-          <input
-            type="tel"
-            name="number"
-            value={number}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={this.handleChange}
-            id={numberInputId}
-          />
-          <button type="submit">Add contact</button>
-        </form>
-        <h2>Contacts</h2>
-        <label htmlFor={filterInputId}>Find contacts by name</label>
-        <input
-          type="text"
-          name="filter"
-          value={filter}
+      <Container>
+        <h1>Phonebook</h1>
+        <ContactForm
+          state={this.state}
           onChange={this.handleChange}
-          id={filterInputId}
+          onSubmit={this.handleSubmit}
         />
-
-        <ul>
-          {names.map(name => {
-            return (
-              <li key={name}>
-                <p>{name}</p>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+        <h2>Contacts</h2>
+        <Filter state={this.state} onChange={this.handleChange} />
+        <ContactList
+          visibleContacts={visibleContacts}
+          onDeleteName={this.onDeleteName}
+        />
+      </Container>
     );
   }
 }
