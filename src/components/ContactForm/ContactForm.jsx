@@ -1,9 +1,9 @@
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 
 import { Form, Input, Button } from './ContactForm.styled';
 
-const ContactForm = ({ state, onChange, onSubmit }) => {
-  const { name, number } = state;
+const ContactForm = ({ name, number, onChange, onSubmit }) => {
   const nameInputId = nanoid();
   const numberInputId = nanoid();
   return (
@@ -33,6 +33,13 @@ const ContactForm = ({ state, onChange, onSubmit }) => {
       <Button type="submit">Add contact</Button>
     </Form>
   );
+};
+
+ContactForm.propTypes = {
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

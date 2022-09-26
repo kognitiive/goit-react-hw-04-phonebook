@@ -1,9 +1,9 @@
 import { nanoid } from 'nanoid';
 import { Input, Wrapper } from './Filter.styled';
+import PropTypes from 'prop-types';
 const filterInputId = nanoid();
 
-const Filter = ({ state, onChange }) => {
-  const { filter } = state;
+const Filter = ({ filter, onChange }) => {
   return (
     <Wrapper>
       <label htmlFor={filterInputId}>Find contacts by name</label>
@@ -16,6 +16,11 @@ const Filter = ({ state, onChange }) => {
       />
     </Wrapper>
   );
+};
+
+Filter.propTypes = {
+  filter: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default Filter;

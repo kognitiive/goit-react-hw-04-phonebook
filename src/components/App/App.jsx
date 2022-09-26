@@ -77,12 +77,13 @@ export class App extends Component {
       <Container>
         <h1>Phonebook</h1>
         <ContactForm
-          state={this.state}
+          name={this.state.name}
+          number={this.state.number}
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}
         />
         <h2>Contacts</h2>
-        <Filter state={this.state} onChange={this.handleChange} />
+        <Filter filter={this.state.filter} onChange={this.handleChange} />
         <ContactList
           visibleContacts={visibleContacts}
           onDeleteName={this.onDeleteName}
