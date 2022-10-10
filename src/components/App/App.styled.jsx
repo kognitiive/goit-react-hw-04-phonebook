@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justufy-constent: center;
+  justufy-content: center;
   padding: 20px;
   background-color: #1c1c1c;
   color: #45f3ff;
