@@ -49,14 +49,8 @@ export default function App() {
   const finalContacts = visibleContacts(contacts);
 
   const onDeleteName = currName => {
-    const newCont = [];
-    contacts.map(contact => {
-      if (currName === contact.name) {
-        return {};
-      }
-      return newCont.push(contact);
-    });
-    setContacts(newCont);
+    const newCont = contacts.filter(contact => contact.name !== currName)
+    return setContacts(newCont);
   };
 
     return (

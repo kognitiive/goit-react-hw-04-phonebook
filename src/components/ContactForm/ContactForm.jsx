@@ -7,7 +7,7 @@ import { Form, Input, Button } from './ContactForm.styled';
 const nameInputId = nanoid();
 const numberInputId = nanoid();
 
-export default function ContactForm(onSubmit) { 
+export default function ContactForm({onSubmit}) { 
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
 

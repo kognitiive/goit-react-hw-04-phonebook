@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const filterInputId = nanoid();
 
-export default function Filter(filter, onChange){
+export default function Filter({filter, onChange}){
     return (
       <Wrapper>
         <label htmlFor={filterInputId}>Find contacts by name</label>
